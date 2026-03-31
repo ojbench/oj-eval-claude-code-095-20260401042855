@@ -33,6 +33,14 @@ struct Permutation { // 置换
         }
     }
 
+    // Move constructor
+    Permutation(Permutation&& other) noexcept {
+        this->size = other.size;
+        this->mapping = other.mapping;
+        other.mapping = nullptr;
+        other.size = 0;
+    }
+
     // Copy assignment operator
     Permutation& operator=(const Permutation& other) {
         if (this != &other) {
@@ -42,6 +50,18 @@ struct Permutation { // 置换
             for (size_t i = 0; i < size; ++i) {
                 this->mapping[i] = other.mapping[i];
             }
+        }
+        return *this;
+    }
+
+    // Move assignment operator
+    Permutation& operator=(Permutation&& other) noexcept {
+        if (this != &other) {
+            delete[] mapping;
+            this->size = other.size;
+            this->mapping = other.mapping;
+            other.mapping = nullptr;
+            other.size = 0;
         }
         return *this;
     }
@@ -161,6 +181,14 @@ struct Cycle { // 轮换
         }
     }
 
+    // Move constructor
+    Cycle(Cycle&& other) noexcept {
+        this->size = other.size;
+        this->elements = other.elements;
+        other.elements = nullptr;
+        other.size = 0;
+    }
+
     // Copy assignment operator
     Cycle& operator=(const Cycle& other) {
         if (this != &other) {
@@ -170,6 +198,18 @@ struct Cycle { // 轮换
             for (size_t i = 0; i < size; ++i) {
                 this->elements[i] = other.elements[i];
             }
+        }
+        return *this;
+    }
+
+    // Move assignment operator
+    Cycle& operator=(Cycle&& other) noexcept {
+        if (this != &other) {
+            delete[] elements;
+            this->size = other.size;
+            this->elements = other.elements;
+            other.elements = nullptr;
+            other.size = 0;
         }
         return *this;
     }
