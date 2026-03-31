@@ -68,7 +68,10 @@ struct Permutation { // 置换
 
     ~Permutation() {
         // TODO: 析构函数,合理管理你的内存😈
-        delete[] mapping;
+        if (mapping != nullptr) {
+            delete[] mapping;
+            mapping = nullptr;
+        }
     }
 
     void apply(int* permutation) const {
@@ -216,18 +219,17 @@ struct Cycle { // 轮换
 
     ~Cycle() {
         // TODO: 析构函数,合理管理你的内存😈
-        delete[] elements;
+        if (elements != nullptr) {
+            delete[] elements;
+            elements = nullptr;
+        }
     }
 
     void apply(int* permutation, size_t size) const {
         // TODO: 将轮换应用大小为size的permutation上,直接修改permutation指向的数组。保证size>=elements[i]。
-        // 轮换 {b_0, b_1, ..., b_{k-1}} 意思是 b_0->b_1->b_2->...->b_{k-1}->b_0
-        if (this->size == 0) return;
-        int temp = permutation[elements[this->size - 1]];
-        for (int i = this->size - 1; i > 0; --i) {
-            permutation[elements[i]] = permutation[elements[i - 1]];
-        }
-        permutation[elements[0]] = temp;
+        // Convert cycle to permutation and apply it
+        Permutation p = toPermutation(size);
+        p.apply(permutation);
     }
 
     friend std::ostream& operator<<(std::ostream& os, const Cycle& c) {
